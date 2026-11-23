@@ -38,9 +38,9 @@ Danos nas hélices de um drone podem alterar a intensidade e o conteúdo em freq
 
 \section{Dados e preparação}
 
-O DronePropB~\cite{dataset} reúne ensaios em solo de um drone comercial com hélice saudável (F0) ou com três tipos de defeito (F1, F2 e F3) em três severidades (SV1 a SV3), em três velocidades (SP1 a SP3) e organizados em configurações (C1 a C4). Cada arquivo traz o sinal de um acelerômetro piezoelétrico de um eixo, amostrado a $f_s = 10$~kHz e sem unidade registrada (usamos unidades arbitrárias, u.a.), e o de uma IMU de três eixos a 1~kHz. Escolhemos o piezo porque sua frequência de Nyquist, 5~kHz, cobre com folga a rotação e seus harmônicos e ainda permite demonstrar o aliasing.
+O DronePropB~\cite{dataset} reúne ensaios em solo de um drone comercial com hélice saudável (F0) ou com três tipos de defeito (F1, F2 e F3) em três severidades (SV1 a SV3), em três velocidades (SP1 a SP3) e organizados em configurações (C1 a C4), provavelmente experimentos diferentes. Cada arquivo traz o sinal de um acelerômetro piezoelétrico de um eixo, amostrado a $f_s = 10$~kHz e sem unidade registrada (usamos unidades arbitrárias, u.a.), e o de uma IMU de três eixos a 1~kHz. Escolhemos o piezo porque sua frequência de Nyquist, 5~kHz, cobre com folga a rotação e seus harmônicos e ainda permite demonstrar o aliasing.
 
-Selecionamos a configuração C1 completa (Tabela~\ref{tab:registros}), com registros de 60~s e 600.000 amostras. Descartamos C2 porque seus saudáveis são cópias idênticas dos de C1, o que verificamos amostra a amostra, e C3 e C4 por terem registros mais curtos ou apenas ensaios saudáveis. As comparações são feitas sempre dentro de uma mesma velocidade, com mesmo sensor, eixo e taxa. Dois dos três saudáveis foram gravados em data diferente da dos defeituosos, então nos exemplos visuais usamos o saudável R1, do mesmo dia.
+Selecionamos a configuração C1 completa (Tabela~\ref{tab:registros}). Os saudáveis de C2 são cópias idênticas dos de C1, mas os defeituosos não; como não se sabe a qual experimento esses saudáveis pertencem, usamos C2 só como checagem (Seção~6). C3 e C4 têm registros curtos ou só saudáveis. As comparações são feitas sempre dentro de uma mesma velocidade, com mesmo sensor, eixo e taxa. Dois dos três saudáveis foram gravados em data diferente da dos defeituosos, então nos exemplos visuais usamos o saudável R1, do mesmo dia.
 
 \begin{table}[htbp]
 \centering
@@ -207,16 +207,16 @@ Perguntamos como a velocidade modifica os picos espectrais e se a diferença ent
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{fig_investigacao.png}
-\caption{À esquerda, espectros médios normalizados em função da ordem $f/f_{rot}$. À direita, desvio da rotação de cada registro em relação à média saudável da mesma velocidade (azul, saudável; laranja, defeito).}
+\includegraphics[width=0.94\textwidth]{fig_investigacao.png}
+\caption{À esquerda, espectros médios normalizados pela ordem $f/f_{rot}$. À direita, desvio da rotação de cada registro em relação à média saudável (azul, saudável; laranja, defeito).}
 \label{fig:investigacao}
 \end{figure}
 
-Nas duas classes e nas três velocidades os picos caem nas ordens inteiras, embora a rotação vá de 56 a 133~Hz, o que confirma o escalamento das posições; as alturas relativas, porém, mudam com a velocidade, então a vibração não é exatamente uma versão comprimida no tempo. O resultado mais claro é a rotação: em SP1 e SP3 todos os registros com defeito giram mais devagar que os saudáveis, e em SP2 todos menos um, com desvios medianos de $-7{,}1\%$, $-4{,}4\%$ e $-3{,}8\%$ (4 a 5~Hz, bem acima de $\Delta f = 1$~Hz). Como as três repetições saudáveis têm a mesma rotação apesar das datas diferentes, o efeito não parece vir da sessão de ensaio. Assim, a velocidade desloca os picos proporcionalmente e altera o perfil harmônico, e só a rotação mais baixa do defeito se mantém nas três velocidades; os dados não permitem dizer por quê.
+Nas duas classes e nas três velocidades os picos caem nas ordens inteiras, o que confirma o escalamento das posições, embora as alturas relativas mudem com a velocidade. O resultado mais claro é a rotação: em C1, 26 dos 27 defeituosos giram mais devagar que todos os saudáveis, com desvios medianos de $-7{,}1\%$, $-4{,}4\%$ e $-3{,}8\%$, e em C2 o efeito se repete em 23 de 27 registros, exceto no F1 mais leve. Como as três repetições saudáveis têm a mesma rotação apesar das datas diferentes, o efeito não parece vir da sessão de ensaio. Assim, só a rotação mais baixa do defeito se mantém nas três velocidades e nas duas configurações, e os dados não permitem dizer por quê.
 
 \section{Conclusão}
 
-No tempo, as medidas de intensidade são redundantes, dependem sobretudo da velocidade e não indicam mais vibração no defeito, e só o fator de crista descreve a forma do sinal. Na frequência, o defeito redistribui a potência entre os harmônicos e reduz levemente a rotação, o único efeito presente nas três velocidades.
+No tempo, as medidas de intensidade são redundantes, dependem sobretudo da velocidade e não indicam mais vibração no defeito, e só o fator de crista descreve a forma do sinal. Na frequência, o defeito redistribui a potência entre os harmônicos e gira um pouco mais devagar em todas as velocidades.
 
 \begin{thebibliography}{9}
 \bibitem{dataset} M. A. A. Ismail, M. E. Elshaar, A. Abdalla e Q. Quan. \textit{DronePropB: Ground Testing Dataset for Commercial Drones with Defective Propellers}. Mendeley Data, V1, 2024. DOI: \href{https://doi.org/10.17632/xkvfjmm8zg.1}{10.17632/xkvfjmm8zg.1}.
