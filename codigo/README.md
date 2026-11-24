@@ -24,7 +24,7 @@ O dataset é o DronePropB (Mendeley Data, DOI [10.17632/xkvfjmm8zg.1](https://do
 1. Na página do dataset, use *Download All* e descompacte o arquivo.
 2. Copie a pasta `DronePropB Ground Testing Dataset`, a que contém os 111 arquivos `.mat`, para esta pasta, ao lado do `main.ipynb`.
 
-Arquivos usados na análise: a configuração C1 nas velocidades SP1 a SP3, com os 9 registros saudáveis `F0_SV0_SP{1,2,3}_C1_R{1,2,3}.mat` e os 27 com defeito `F{1,2,3}_SV{1,2,3}_SP{1,2,3}_C1.mat`. Os registros equivalentes da configuração C2 são usados só na verificação dos dados e na checagem da seção 3.6.
+Arquivos usados na análise: a configuração C1 nas velocidades SP1 a SP3, com os 9 registros saudáveis `F0_SV0_SP{1,2,3}_C1_R{1,2,3}.mat` e os 27 com defeito `F{1,2,3}_SV{1,2,3}_SP{1,2,3}_C1.mat`. Os registros equivalentes da configuração C2 são usados só na verificação dos dados e na checagem da seção 5.
 
 ## Como executar
 
