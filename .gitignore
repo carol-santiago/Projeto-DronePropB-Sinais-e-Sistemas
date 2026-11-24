@@ -1,0 +1,18 @@
+# Dataset DronePropB (baixar do Mendeley Data, ver entrega 1/README.md)
+entrega 1/DronePropB Ground Testing Dataset/
+entrega 1/DronePropB_Dataset/
+*.mat
+
+# Arquivos gerados pela versão de estudo
+código/figuras_relatorio/
+código/caracteristicas_janelas.csv
+
+# Jupyter e Python
+.ipynb_checkpoints/
+__pycache__/
+
+# Arquivos auxiliares do LaTeX
+*.aux
+*.log
+*.out
+*.synctex.gz

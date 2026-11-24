@@ -34,7 +34,7 @@ Analisamos sinais reais de aceleração do conjunto DronePropB para comparar hé
 
 \section{Introdução}
 
-Danos nas hélices de um drone podem alterar a intensidade e o conteúdo em frequência das vibrações que ele produz. Neste relatório parcial de um projeto ainda em andamento, caracterizamos sinais de aceleração de hélices saudáveis e defeituosas nos domínios do tempo e da frequência, extraímos características por janela e discutimos quais delas distinguem as condições, como preparação para a etapa de classificação. Ao longo do texto indicamos qual resultado da disciplina justifica cada passo, citando as notas de aula pelo número da aula e do slide.
+Danos nas hélices de um drone podem alterar a intensidade e o conteúdo em frequência das vibrações que ele produz. Neste relatório parcial de um projeto ainda em andamento, caracterizamos sinais de aceleração de hélices saudáveis e defeituosas nos domínios do tempo e da frequência, extraímos características por janela e discutimos quais delas distinguem as condições, como preparação para a etapa de classificação. Ao longo do texto indicamos qual resultado da disciplina justifica cada passo, citando as lectures da disciplina pelo número e pelo slide.
 
 \section{Dados e preparação}
 
@@ -44,7 +44,7 @@ Selecionamos a configuração C1 completa (Tabela~\ref{tab:registros}). Os saud�
 
 \begin{table}[htbp]
 \centering
-\caption{Registros selecionados: configuração C1, piezo (um eixo), $f_s = 10$~kHz, 60~s e 600.000 amostras cada.}
+\caption{Registros selecionados: configuração C1, piezo (um eixo), $f_s = 10$~kHz, 60~s e 600.000 amostras cada. A lista registro a registro está no notebook (seção 3.1.2).}
 \label{tab:registros}
 \small
 \begin{tabular}{lllcc}
@@ -57,13 +57,13 @@ Defeito & F1 a F3, SV1 a SV3, SP1 a SP3 & \texttt{F1\_SV3\_SP2\_C1} & 27 & 1.620
 \end{tabular}
 \end{table}
 
-Nenhum registro tem valores ausentes, o passo de tempo é constante e a média de cada registro é no máximo 5,3\% do desvio padrão, um pequeno offset do sensor. O RMS a cada segundo fica estável ao longo dos 60~s, sem partida ou parada do motor, então não recortamos nem filtramos os sinais; o único tratamento é remover a média de cada janela antes da FFT. Como a energia cresce sem limite enquanto o motor gira, mas a potência média é finita, tratamos a vibração como sinal de potência, com $0 < P_x < \infty$~\cite[slide 43]{aula2}, e medimos a intensidade por potências e valores RMS.
+Nenhum registro tem valores ausentes, o passo de tempo é constante e a média de cada registro é no máximo 5,3\% do desvio padrão, um pequeno offset do sensor. O RMS a cada segundo fica estável ao longo dos 60~s, sem partida ou parada do motor, então não recortamos nem filtramos os sinais; o único tratamento é remover a média de cada janela antes da FFT. Como a vibração não decai enquanto o motor gira, medimos a intensidade por potências e valores RMS, e não por energias.
 
-Dividimos os sinais em janelas de $N = 10.000$ amostras (1~s), sem sobreposição, num total de 2.160 janelas identificadas pelo registro de origem. A janela $i$ é o sinal adiantado de $iN$ amostras~\cite[slide 22]{aula2}, $x_i[n] = x[n + iN]$ com $n = 0, \dots, N-1$, ou, de forma equivalente, o produto do sinal por um retângulo de duração $T_0 = N/f_s$~\cite[slide 14]{aula3}. Com 1~s, a resolução espectral é de 1~Hz e cada janela contém de 50 a 130 voltas da hélice.
+Dividimos os sinais em janelas de $N = 10.000$ amostras (1~s), sem sobreposição, num total de 2.160 janelas identificadas pelo registro de origem. A janela $i$ é o sinal adiantado de $iN$ amostras, $x_i[n] = x[n + iN]$ com $n = 0, \dots, N-1$, ou, de forma equivalente, o produto do sinal por um retângulo de duração $T_0 = N/f_s$~\cite[slide 14]{aula3}. Com 1~s, a resolução espectral é de 1~Hz e cada janela contém de 50 a 130 voltas da hélice.
 
 \section{Análise no domínio do tempo}
 
-Na Figura~\ref{fig:tempo}, os dois registros completos têm amplitude estável e não se vê qual hélice tem defeito. O zoom revela rajadas que se repetem a cada 10~ms, aproximadamente o período de uma volta do rotor em SP2. É a situação do acorde de piano da primeira aula, em que ``é difícil dizer quais são as notas a partir da forma de onda''~\cite[slide 13]{aula1}.
+Na Figura~\ref{fig:tempo}, os dois registros completos têm amplitude estável e não se vê qual hélice tem defeito. O zoom revela rajadas que se repetem a cada 10~ms, aproximadamente o período de uma volta do rotor em SP2.
 
 \begin{figure}[htbp]
 \centering
@@ -120,7 +120,7 @@ onde $X[k]$ é a DFT calculada pela FFT. Daí saem o eixo, $f_k = k/T_0 = k f_s/
 
 \subsection{Espectros comparativos}
 
-Na Figura~\ref{fig:espectros} (média das 60 janelas de cada registro em SP2), o maior pico do saudável está em 98~Hz, que interpretamos como a rotação (cerca de 5.900~rpm, coerente com as rajadas a cada 10~ms), e os demais em múltiplos inteiros dela (197, 296, 394 e 492~Hz). Os defeituosos têm a mesma estrutura deslocada para baixo: 93 a 94~Hz na rotação e 370 a 374~Hz no quarto harmônico. É o espectro de um sinal periódico: na série de Fourier $x(t) = \sum_n D_n e^{jn\omega_0 t}$, com $\omega_0 = 2\pi f_{rot}$~\cite[slide 4]{aula8}, só existem componentes em $n f_{rot}$, e cada $D_n$ é calculado sobre um único período. Assim, as posições dos picos dependem só da rotação e as alturas, da forma da vibração em uma volta. No saudável domina o primeiro harmônico; em F2 e F3 o quarto fica tão alto quanto o primeiro ou mais, e em F1 o primeiro cresce. O defeito muda, portanto, a forma da vibração em cada volta. Não atribuímos causa física aos picos que não são múltiplos da rotação.
+Na Figura~\ref{fig:espectros} (média das 60 janelas de cada registro em SP2), o maior pico do saudável está em 98~Hz, que interpretamos como a rotação (cerca de 5.900~rpm, coerente com as rajadas a cada 10~ms), e os demais em múltiplos inteiros dela (197, 296, 394 e 492~Hz). Os defeituosos têm a mesma estrutura deslocada para baixo: 93 a 94~Hz na rotação e 370 a 374~Hz no quarto harmônico. É o espectro de um sinal periódico: sua transformada só tem impulsos em $n\omega_0$, com $\omega_0 = 2\pi f_{rot}$~\cite[slide 4]{aula13}, e ``a transformada de Fourier do sinal periódico é a transformada de Fourier amostrada de um período''~\cite[slide 15]{aula13}. Assim, as posições dos picos dependem só da rotação e as alturas, da forma da vibração em uma volta. No saudável domina o primeiro harmônico; em F2 e F3 o quarto fica tão alto quanto o primeiro ou mais, e em F1 o primeiro cresce. O defeito muda, portanto, a forma da vibração em cada volta. Não atribuímos causa física aos picos que não são múltiplos da rotação.
 
 \begin{figure}[htbp]
 \centering
@@ -168,7 +168,7 @@ A frequência dominante salta entre harmônicos de uma janela para outra, o que 
 
 \subsection{Resolução espectral}
 
-Na Figura~\ref{fig:resalias}a, com 0,1~s a rotação aparece ``em 100~Hz'', a raia mais próxima de 98,5~Hz, e picos a menos de 10~Hz se fundem; com 2~s ($\Delta f = 0{,}5$~Hz) ela aparece em 98,5~Hz, e com 10~s o pico se divide em raias entre 97 e 100~Hz, porque a rotação varia levemente no trecho. O espaçamento $\Delta f = 1/T_0$ vem da série de Fourier num intervalo de duração $T_0$~\cite[slide 4]{aula8} e depende só da duração, não da taxa de amostragem. O alargamento dos picos vem do recorte: o produto por um retângulo, de transformada $T_0\,\mathrm{sinc}(\omega T_0/2)$~\cite[slide 8]{aula10}, vira $\frac{1}{2\pi}(F_1 * F_2)(j\omega)$ na frequência~\cite[slide 3]{aula11}, então cada raia vira uma sinc de largura inversamente proporcional a $T_0$, pois ``o pulso estreito produz uma transformada larga e um pulso largo produz um espectro estreito''~\cite[slide 10]{aula10}. A janela de 1~s resolve os 4~Hz entre saudável e defeito sem que a rotação varie dentro dela.
+Na Figura~\ref{fig:resalias}a, com 0,1~s a rotação aparece ``em 100~Hz'', a raia mais próxima de 98,5~Hz, e picos a menos de 10~Hz se fundem; com 2~s ($\Delta f = 0{,}5$~Hz) ela aparece em 98,5~Hz, e com 10~s o pico se divide em raias entre 97 e 100~Hz, porque a rotação varia levemente no trecho. A FFT trata o trecho como um período de um sinal periódico, cujo espectro são amostras da transformada de um período~\cite[slide 15]{aula13}, espaçadas de $\Delta f = 1/T_0$, que depende só da duração, não da taxa de amostragem. O alargamento dos picos vem do recorte: o produto por um retângulo, de transformada $T_0\,\mathrm{sinc}(\omega T_0/2)$~\cite[slide 8]{aula10}, vira $\frac{1}{2\pi}(F_1 * F_2)(j\omega)$ na frequência~\cite[slide 3]{aula11}, então cada raia vira uma sinc de largura inversamente proporcional a $T_0$, pois ``o pulso estreito produz uma transformada larga e um pulso largo produz um espectro estreito''~\cite[slide 10]{aula10}. A janela de 1~s resolve os 4~Hz entre saudável e defeito sem que a rotação varie dentro dela.
 
 \begin{figure}[htbp]
 \centering
@@ -179,7 +179,7 @@ Na Figura~\ref{fig:resalias}a, com 0,1~s a rotação aparece ``em 100~Hz'', a ra
 
 \subsection{Amostragem e aliasing}
 
-Reduzimos a taxa de 10~s do saudável em SP3, com picos em 134 e 403~Hz, para $f_s' = 500$~Hz (Nyquist de 250~Hz), guardando uma amostra a cada 20: $x_d[n] = x[20n]$, o escalamento no tempo discreto ou decimação~\cite[slide 18]{aula2} (Figura~\ref{fig:resalias}b). Como a amostragem ideal é o produto por um trem de impulsos~\cite[slide 30]{aula3}, pela convolução na frequência~\cite[slide 3]{aula11} o espectro amostrado é o original repetido a cada $f_s'$, e componentes acima de $f_s'/2$ fazem as cópias se sobreporem. Assim, o pico de 403~Hz reaparece em $500 - 403 = 97$~Hz sem filtro, onde o original não tem nada, e poderia ser confundido com a rotação de SP2. Com um passa-baixas aplicado antes, que idealmente ``suprime todas as frequências acima de uma frequência de corte''~\cite[slide 16]{aula12} e atua como $Y(j\omega) = H(j\omega)X(j\omega)$~\cite[slide 4]{aula12}, o pico falso some e a faixa de 0 a 250~Hz fica igual à original. Analisar até o quinto harmônico em SP3 (cerca de 670~Hz) exige $f_s > 1{,}3$~kHz, o que exclui a IMU.
+Reduzimos a taxa de 10~s do saudável em SP3, com picos em 134 e 403~Hz, para $f_s' = 500$~Hz (Nyquist de 250~Hz), guardando uma amostra a cada 20: $x_d[n] = x[20n]$, o escalamento no tempo discreto ou decimação~\cite[slide 18]{aula2} (Figura~\ref{fig:resalias}b). Pelo teorema da amostragem, o espectro amostrado é o original repetido a cada $f_s'$~\cite[slide 20]{aula13}, e só não há aliasing se não houver componentes acima de $f_s'/2$, o critério de Nyquist~\cite[slide 23]{aula13}. Assim, o pico de 403~Hz reaparece em $500 - 403 = 97$~Hz sem filtro, onde o original não tem nada, e poderia ser confundido com a rotação de SP2. Com um passa-baixas aplicado antes, que idealmente ``suprime todas as frequências acima de uma frequência de corte''~\cite[slide 16]{aula12} e atua como $Y(j\omega) = H(j\omega)X(j\omega)$~\cite[slide 4]{aula12}, o pico falso some e a faixa de 0 a 250~Hz fica igual à original. Analisar até o quinto harmônico em SP3 (cerca de 670~Hz) exige $f_s > 1{,}3$~kHz, o que exclui a IMU.
 
 \section{Comparação entre os domínios}
 
@@ -212,7 +212,7 @@ Perguntamos como a velocidade modifica os picos espectrais e se a diferença ent
 \label{fig:investigacao}
 \end{figure}
 
-Nas duas classes e nas três velocidades os picos caem nas ordens inteiras, o que confirma o escalamento das posições, embora as alturas relativas mudem com a velocidade. O resultado mais claro é a rotação: em C1, 26 dos 27 defeituosos giram mais devagar que todos os saudáveis, com desvios medianos de $-7{,}1\%$, $-4{,}4\%$ e $-3{,}8\%$, e em C2 o efeito se repete em 23 de 27 registros, exceto no F1 mais leve. Como as três repetições saudáveis têm a mesma rotação apesar das datas diferentes, o efeito não parece vir da sessão de ensaio. Assim, só a rotação mais baixa do defeito se mantém nas três velocidades e nas duas configurações, e os dados não permitem dizer por quê.
+Nas duas classes e nas três velocidades os picos caem nas ordens inteiras, o que confirma o escalamento das posições, embora as alturas relativas mudem com a velocidade. O resultado mais claro é a rotação: em C1, 26 dos 27 defeituosos giram mais devagar que todos os saudáveis, com desvios medianos de $-7{,}1\%$, $-4{,}4\%$ e $-3{,}8\%$, e em C2 o efeito se repete em 23 de 27 registros, exceto em F1 nas severidades mais leves. Como as três repetições saudáveis têm a mesma rotação apesar das datas diferentes, o efeito não parece vir da sessão de ensaio. Assim, só a rotação mais baixa do defeito se mantém nas três velocidades e nas duas configurações, e os dados não permitem dizer por quê.
 
 \section{Conclusão}
 
@@ -220,13 +220,13 @@ No tempo, as medidas de intensidade são redundantes, dependem sobretudo da velo
 
 \begin{thebibliography}{9}
 \bibitem{dataset} M. A. A. Ismail, M. E. Elshaar, A. Abdalla e Q. Quan. \textit{DronePropB: Ground Testing Dataset for Commercial Drones with Defective Propellers}. Mendeley Data, V1, 2024. DOI: \href{https://doi.org/10.17632/xkvfjmm8zg.1}{10.17632/xkvfjmm8zg.1}.
-\bibitem{aula1} D. R. Campelo. \textit{Lecture 1: Introduction to the course}. Notas de aula de CIN0020 Sinais e Sistemas, CIn-UFPE, 2026.
 \bibitem{aula2} D. R. Campelo. \textit{Lecture 2: Signal Characteristics and Models}. Notas de aula de CIN0020 Sinais e Sistemas, CIn-UFPE, 2026.
 \bibitem{aula3} D. R. Campelo. \textit{Lecture 3: Signal Models}. Notas de aula de CIN0020 Sinais e Sistemas, CIn-UFPE, 2026.
 \bibitem{aula8} D. R. Campelo. \textit{Lecture 8: Continuous-Time Fourier Series}. Notas de aula de CIN0020 Sinais e Sistemas, CIn-UFPE, 2026.
 \bibitem{aula10} D. R. Campelo. \textit{Lecture 10: Fourier Transform Properties}. Notas de aula de CIN0020 Sinais e Sistemas, CIn-UFPE, 2026.
 \bibitem{aula11} D. R. Campelo. \textit{Lecture 11: Fourier Theorems and Generalized Fourier Transforms}. Notas de aula de CIN0020 Sinais e Sistemas, CIn-UFPE, 2026.
 \bibitem{aula12} D. R. Campelo. \textit{Lecture 12: Frequency Response of LTI Systems}. Notas de aula de CIN0020 Sinais e Sistemas, CIn-UFPE, 2026.
+\bibitem{aula13} D. R. Campelo. \textit{Lecture 13: Impulse Trains, Periodic Signals, and Sampling}. Notas de aula de CIN0020 Sinais e Sistemas, CIn-UFPE, 2026.
 \end{thebibliography}
 
 \end{document}
