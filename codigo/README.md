@@ -36,5 +36,3 @@ jupyter notebook main.ipynb
 ```
 
 No Jupyter, execute todas as células (*Run All*). A execução completa leva cerca de um minuto e gera `caracteristicas_janelas.csv` e as pastas `output/figuras/` e `output/tabelas/`. O notebook foi testado com Python 3.11, numpy 1.24, pandas 1.5, matplotlib 3.7 e scipy 1.10.
-
-O notebook também roda no Google Colab. Nesse caso, a célula de configuração monta o Google Drive, e a variável `PASTA` precisa apontar para a pasta do dataset no Drive.

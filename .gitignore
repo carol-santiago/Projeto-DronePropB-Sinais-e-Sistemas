@@ -1,6 +1,5 @@
 # Dataset DronePropB (baixar do Mendeley Data, ver codigo/README.md)
 codigo/DronePropB Ground Testing Dataset/
-codigo/DronePropB_Dataset/
 *.mat
 
 # Jupyter e Python
